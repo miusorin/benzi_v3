@@ -55,11 +55,11 @@ namespace Template_ASID
             timer1.Tick += new EventHandler(refreshValues);
             timer1.Interval = 100;
 
-            B.Background = Brushes.Green;
+            S0_button.Background = Brushes.Green;
             LampaH1.Visibility = Visibility.Visible;
 
             ///
-            // Connect();
+            // Connect(); //Uncomment when compile for ASID!
             ///
         }
 
@@ -150,17 +150,17 @@ namespace Template_ASID
             ///
         }
 
-        private void ButonulB(object sender, RoutedEventArgs e)
+        private void S0_button_TouchDown(object sender, TouchEventArgs e)
         {
             if (b1 == 0)
             {
-                B.Background = Brushes.Red;
+                S0_button.Background = Brushes.Red;
                 b1 = 1;
  
             }
             else
             {
-                B.Background = Brushes.Green;
+                S0_button.Background = Brushes.Green;
                 b1 = 0;
             }
         }
