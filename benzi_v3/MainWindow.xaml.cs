@@ -19,7 +19,7 @@ using System.IO.Ports;
 using Modbus.Device;
 using System.Collections;
 
-namespace Template_ASID
+namespace benzi_v3
 {
 
     /// <summary>
@@ -44,8 +44,15 @@ namespace Template_ASID
 
         Timer timer1;
 
-        public static int b1;
-       
+        public static int button0;
+        public static int button1;
+        public static int button2;
+        public static int button3;
+        public static int button4;
+        public static int button5;
+        public static int button6;
+        public static int button7;
+        public static int button8;
 
         public MainWindow()
         {
@@ -55,12 +62,17 @@ namespace Template_ASID
             timer1.Tick += new EventHandler(refreshValues);
             timer1.Interval = 100;
 
-            S0_button.Background = Brushes.Green;
-            LampaH1.Visibility = Visibility.Visible;
+            //S0_button.Background = Brushes.Green;
+            LampaH1.Fill = System.Windows.Media.Brushes.Green;
 
             ///
             // Connect(); //Uncomment when compile for ASID!
             ///
+        }
+
+        private void InitializeComponent()
+        {
+            throw new NotImplementedException();
         }
 
         public void Connect()
@@ -150,18 +162,27 @@ namespace Template_ASID
             ///
         }
 
-        private void S0_button_TouchDown(object sender, TouchEventArgs e)
+        private void S1_button_TouchDown(object sender, TouchEventArgs e)
         {
-            if (b1 == 0)
+            if (button1 == 0)
             {
-                S0_button.Background = Brushes.Red;
-                b1 = 1;
- 
+                button1 = 1;
+            }           
+        }
+
+        private void S2_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            if (button2 == 0)
+            {
+                button2 = 1;
             }
-            else
+        }
+
+        private void S3_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            if (button3 == 0)
             {
-                S0_button.Background = Brushes.Green;
-                b1 = 0;
+                button3 = 1;
             }
         }
 
@@ -170,9 +191,13 @@ namespace Template_ASID
             Get_DI();
             Get_DO();
 
-            if (b1 == 0)
+            if (button0 == 0)
             {
                 resetDOBit(0);
+            }
+            else
+            {
+                resetDOBit(1);
             }
             if (b1 == 1)
             {
