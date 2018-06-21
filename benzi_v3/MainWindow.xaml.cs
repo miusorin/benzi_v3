@@ -18,6 +18,9 @@ using System.IO;
 using System.IO.Ports;
 using Modbus.Device;
 using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Media.Animation;
 
 namespace benzi_v3
 {
@@ -25,6 +28,7 @@ namespace benzi_v3
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
         //Declarare parametri DAQ
@@ -39,11 +43,10 @@ namespace benzi_v3
         public ushort SHJ_digital_outputReg = 102;
         public SerialPort port;
         public IModbusSerialMaster modbus_master;
-        ///////////
-
-
+        
         Timer timer1;
 
+        public static bool info = false;
         public static int button0;
         public static int button1;
         public static int button2;
@@ -53,17 +56,23 @@ namespace benzi_v3
         public static int button6;
         public static int button7;
         public static int button8;
+        
+        public object LampaH1 { get; set; }
+        public object LampaH2 { get; set; }
+        public object LampaH3 { get; set; }
+        public object LampaH4 { get; set; }
+
 
         public MainWindow()
         {
+
             InitializeComponent();
 
             timer1 = new Timer();
             timer1.Tick += new EventHandler(refreshValues);
             timer1.Interval = 100;
 
-            //S0_button.Background = Brushes.Green;
-            LampaH1.Fill = System.Windows.Media.Brushes.Green;
+           
 
             ///
             // Connect(); //Uncomment when compile for ASID!
@@ -98,7 +107,7 @@ namespace benzi_v3
             catch
             {
                 MessageBoxResult result =
-                    System.Windows.MessageBox.Show("Eroare de conexiune. Redeschidem aplicatia?", "Restart Confirmation",
+                    System.Windows.MessageBox.Show("Eroare de conexiune. Redeschidem aplicatia?", "Confirmare restart",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
@@ -110,6 +119,27 @@ namespace benzi_v3
                 {
 
                 }
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e) //MUST be MANUALLY linked
+        {
+            MessageBoxResult result =
+                System.Windows.MessageBox.Show("Iesire din aplicatie?", "Confirmare iesire",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                string shortcutName = string.Concat(Environment.GetFolderPath(Environment.SpecialFolder.Programs),
+                "\\Menu\\", "Menu", ".appref-ms");
+                ProcessStartInfo openMenu = new ProcessStartInfo(shortcutName);
+                openMenu.WindowStyle = ProcessWindowStyle.Maximized;
+                Process.Start(openMenu);
+                e.Cancel = false;
+            }
+            if (result == MessageBoxResult.No)
+            {
+                e.Cancel = true;
             }
         }
 
@@ -162,6 +192,26 @@ namespace benzi_v3
             ///
         }
 
+        public void AnimationControl() { }
+
+        private void button_Click(object sender, RoutedEventArgs e)//HomeButtonClick
+        {
+            this.Close();
+        }
+
+        private void INFO_button_Click(object sender, RoutedEventArgs e)
+        {
+            if (!info)
+            {
+                var _infoWindow = new benzi_v3.InfoWindow();
+                _infoWindow.Show();
+                //_infoWindow.blurEffect.Radius = 10;
+
+                info = true;
+
+            }
+        }
+
         private void S1_button_TouchDown(object sender, TouchEventArgs e)
         {
             if (button1 == 0)
@@ -186,31 +236,160 @@ namespace benzi_v3
             }
         }
 
+        private void S0_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 0));
+        }
+
+        private void S0_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 0));
+        }
+
+       
+
+        private void S1_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 1));
+        }
+
+       
+        private void S2_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 2));
+        }
+
+        
+
+        private void S3_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 3));
+        }
+
+        private void S4_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 4));
+        }
+
+        private void S4_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 4));
+        }
+
+        private void S5_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Random r = new Random();
+            int rInt = r.Next(0, 100);
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 5));
+
+        }
+
+        private void S5_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 5));
+        }
+
+        private void S6_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 6));
+        }
+
+        private void S6_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 6));
+        }
+
+        private void S7_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 7));
+        }
+
+        private void S7_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 7));
+        }
+
+        private void S8_button_TouchDown(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 8));
+        }
+
+        private void S8_button_TouchUp(object sender, TouchEventArgs e)
+        {
+            Get_DO();
+            //modbus_master_serial.WriteSingleRegister(SHJ_digital_slaveID, SHJ_digital_outputReg, (ushort)(DO - 2 ^ 8));
+        }
+
+
+
+
+        public void CreateAPath()
+        {
+
+            // Create a blue and a black Brush
+
+            SolidColorBrush blueBrush = new SolidColorBrush();
+
+            blueBrush.Color = Colors.Blue;
+
+            SolidColorBrush blackBrush = new SolidColorBrush();
+
+            blackBrush.Color = Colors.Black;
+        }
+
         private void refreshValues(object sender, EventArgs e)
         {
             Get_DI();
             Get_DO();
 
-            if (button0 == 0)
+            if (button1 == 0)
             {
                 resetDOBit(0);
             }
-            else
+            if (button1 == 1)
             {
-                resetDOBit(1);
+                setDOBit(0);
             }
-            if (b1 == 1)
+
+            if (button2 == 0)
+            {
+                resetDOBit(0);
+            }
+            if (button2 == 1)
+            {
+                setDOBit(0);
+            }
+
+            if (button3 == 0)
+            {
+                resetDOBit(0);
+            }
+            if (button3 == 1)
             {
                 setDOBit(0);
             }
 
             if (DIbits[0])
             {
-                LampaH1.Visibility = Visibility.Visible;
+                LampaH1 = Brushes.Red;
             }
             if (!DIbits[0])
             {
-                LampaH.Visibility = Visibility.Visible;
+                LampaH1 = Brushes.Green;
             }
 
         }

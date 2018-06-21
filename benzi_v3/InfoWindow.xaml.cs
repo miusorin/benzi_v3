@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace benzi_v2
+namespace benzi_v3
 {
     /// <summary>
     /// Interaction logic for InfoWindow.xaml
